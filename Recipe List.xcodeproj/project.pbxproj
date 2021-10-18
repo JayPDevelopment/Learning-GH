@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A51E8773271D115500AAE858 /* RecipeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E8772271D115500AAE858 /* RecipeTabView.swift */; };
 		A5B5CF52271C9DA800758071 /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B5CF51271C9DA800758071 /* RecipeDetailView.swift */; };
 		A5B5CF7F271CEB8E00758071 /* GitHubModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B5CF7E271CEB8E00758071 /* GitHubModel.swift */; };
 		A5E74F6E271BC8F900F184EE /* Recipe_ListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E74F6D271BC8F900F184EE /* Recipe_ListApp.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A51E8772271D115500AAE858 /* RecipeTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTabView.swift; sourceTree = "<group>"; };
 		A5B5CF51271C9DA800758071 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
 		A5B5CF7E271CEB8E00758071 /* GitHubModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubModel.swift; sourceTree = "<group>"; };
 		A5E74F6A271BC8F900F184EE /* Recipe List.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Recipe List.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,6 +90,7 @@
 			children = (
 				A5E74F6F271BC8F900F184EE /* ContentView.swift */,
 				A5B5CF51271C9DA800758071 /* RecipeDetailView.swift */,
+				A51E8772271D115500AAE858 /* RecipeTabView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -196,6 +199,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A51E8773271D115500AAE858 /* RecipeTabView.swift in Sources */,
 				A5E74F83271BCB3200F184EE /* Recipe.swift in Sources */,
 				A5B5CF52271C9DA800758071 /* RecipeDetailView.swift in Sources */,
 				A5E74F85271BCC1D00F184EE /* RecipeModel.swift in Sources */,
