@@ -9,7 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @ObservedObject var model = RecipeModel()
+    // This is how we populate the model variable with our "master" instance of RecipeModel
+    @EnvironmentObject var model:RecipeModel
     
     var body: some View {
         
