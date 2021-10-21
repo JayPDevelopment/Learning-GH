@@ -34,11 +34,11 @@ struct RecipeDetailView: View {
                         .font(.headline)
                         .padding([.bottom, .top], 5)
                     
-                    ForEach (recipe.ingredients, id: \.self) { item in
+                    ForEach (recipe.ingredients) { item in
                         
                         // Here we google searched "unicode dot", clicked the first result and copy/pasted the dot itself
                         
-                        Text("• " + item)
+                        Text("• " + item.name)
                     }
                 }
                 // This is just padding on the left and right at the same time
