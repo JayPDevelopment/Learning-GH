@@ -12,7 +12,6 @@ class DataService {
     // If all we're using this class for is to call this method, we can make this into a static method or type method
     // This means we can call the function directly without having to call an instance of the class first.
     // See the RecipeModel for how this works in action
-    
     static func getLocalData() -> [Recipe] {
         
         // Parse local json file
