@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct RecipeListView: View {
     
     // This is how we populate the model variable with our "master" instance of RecipeModel
     @EnvironmentObject var model:RecipeModel
@@ -60,7 +60,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        RecipeListView()
             .environmentObject(RecipeModel())
     }
 }

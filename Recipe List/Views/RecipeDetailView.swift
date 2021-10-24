@@ -11,6 +11,8 @@ struct RecipeDetailView: View {
     
     var recipe:Recipe
     
+    @State var selectedServingSize = 2
+    
     var body: some View {
         ScrollView {
             
@@ -27,6 +29,27 @@ struct RecipeDetailView: View {
                     .resizable()
                     .scaledToFill()
                 
+                // MARK: Recipe Title
+                Text(recipe.name)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding(.top, 20)
+                    .padding(.leading)
+                
+                // MARK: Serving Size Picker
+                VStack(alignment: .leading) {
+                    Text("Select your serving size")
+                    Picker("", selection: $selectedServingSize) {
+                        Text("2").tag(2)
+                        Text("4").tag(4)
+                        Text("6").tag(6)
+                        Text("8").tag(8)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .frame(width:160)
+                }
+                .padding()
+                
                 // MARK: Ingredients
                 
                 VStack(alignment: .leading) {
@@ -37,8 +60,10 @@ struct RecipeDetailView: View {
                     ForEach (recipe.ingredients) { item in
                         
                         // Here we google searched "unicode dot", clicked the first result and copy/pasted the dot itself
+                        // the '.lowercased()' syntax detects capital letters and changes them to lowercase
+                        // Here, we're running the getPortion method in the RecipeModel, passing in our parameters and displaying what the method returns along with a bullet point before and the lowercased version of the item name after
                         
-                        Text("• " + item.name)
+                        Text("• " + RecipeModel.getPortion(ingredient: item, recipeServings: recipe.servings, targetServings: selectedServingSize) + " " + item.name.lowercased())
                     }
                 }
                 // This is just padding on the left and right at the same time
@@ -62,9 +87,7 @@ struct RecipeDetailView: View {
                 }
                 .padding(.horizontal)
             }
-            
         }
-        .navigationBarTitle(recipe.name)
     }
 }
 

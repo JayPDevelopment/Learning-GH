@@ -12,6 +12,9 @@ struct RecipeFeaturedView: View {
     // This is how we populate the model variable with our "master" instance of RecipeModel
     @EnvironmentObject var model:RecipeModel
     
+    // This is our .sheet controlling variable for making our recipe cards into buttons
+    @State var isDetailViewShowing = false
+    
     var body: some View {
         
         // We embedded all of our code into a geometry reader so that we can adjust the rectangle below
@@ -34,20 +37,36 @@ struct RecipeFeaturedView: View {
                         // Only show those that should be featured
                         if model.recipes[index].featured {
                             
-                            // Recipe card
-                            ZStack {
-                                Rectangle()
-                                    .foregroundColor(.white)
+                            // Recipe card button
+                            Button(action: {
                                 
-                                VStack(spacing: 0) {
-                                    Image(model.recipes[index].image)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .clipped()
-                                    Text(model.recipes[index].name)
-                                        .padding(5)
+                                //Show the recipe detail sheet
+                                self.isDetailViewShowing = true
+                            }) {
+                                
+                                // Recipe card
+                                ZStack {
+                                    Rectangle()
+                                        .foregroundColor(.white)
+                                    
+                                    VStack(spacing: 0) {
+                                        Image(model.recipes[index].image)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .clipped()
+                                        Text(model.recipes[index].name)
+                                            .padding(5)
+                                    }
                                 }
                             }
+                            // This allows us to slide up the RecipeDetailView when the button is tapped, changing isDetailViewShowing to true and running the .sheet modifier
+                            // The '$' binds the variable so that when the user dismisses the popup view, the isDetailViewShowing goes back to 'false'
+                            .sheet(isPresented: $isDetailViewShowing) {
+                                // Show the RecipeDetailView
+                                RecipeDetailView(recipe: model.recipes[index])
+                            }
+                            // This keeps the Button from turning the text within the label blue
+                            .buttonStyle(PlainButtonStyle())
                             .frame(width: geo.size.width - 40, height: geo.size.height - 100, alignment: .center)
                             .cornerRadius(15)
                             // This creates the sexy floating card look
