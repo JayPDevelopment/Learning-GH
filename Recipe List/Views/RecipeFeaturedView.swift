@@ -15,6 +15,9 @@ struct RecipeFeaturedView: View {
     // This is our .sheet controlling variable for making our recipe cards into buttons
     @State var isDetailViewShowing = false
     
+    // This is how we track which card is showing in our ForEach loop so that we can reference that recipe to fill in our Prep Time and Highlights section below the cards
+    @State var tabSelectionIndex = 0
+    
     var body: some View {
         
         // We embedded all of our code into a geometry reader so that we can adjust the rectangle below
@@ -29,7 +32,8 @@ struct RecipeFeaturedView: View {
             GeometryReader { geo in
                 
                 // TabView can also be used to create a swipeable card type of view
-                TabView {
+                // The TabView can also capture the index of the selected tab.  We can then bind that to the tabSelectionIndex variable and store it there for use outside of the TabView
+                TabView (selection: $tabSelectionIndex) {
                     
                     // Loop through each recipe
                     ForEach (0..<model.recipes.count) { index in
@@ -59,6 +63,8 @@ struct RecipeFeaturedView: View {
                                     }
                                 }
                             }
+                            // Here we tag the card with the array index.  I think this is the tag that then gets bound to the tabSelectionIndex
+                            .tag(index)
                             // This allows us to slide up the RecipeDetailView when the button is tapped, changing isDetailViewShowing to true and running the .sheet modifier
                             // The '$' binds the variable so that when the user dismisses the popup view, the isDetailViewShowing goes back to 'false'
                             .sheet(isPresented: $isDetailViewShowing) {
@@ -85,13 +91,32 @@ struct RecipeFeaturedView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Preparation Time")
                     .font(.headline)
-                Text("1 Hour")
+                // We need access to the recipe being displayed to update the below data but that info is inside the ForEach loop.  So, we pull it out using the tabSelectionIndex
+                Text(model.recipes[tabSelectionIndex].prepTime)
                 Text("Highlights")
                     .font(.headline)
-                Text("Healthy, Hearty")
+                // We made a separate view that processes the array of strings in the highlights section of the json data and displays a single text string containing those elements. We run it here.
+                RecipeHighlights(highlights: model.recipes[tabSelectionIndex].highlights)
             }
             .padding([.leading, .bottom])
         }
+        
+        // Here's how we run our method setting the initial tabSelectionIndex.  We couldn't just run it as an init() because it would run too early.  It hasn't populated the tabview or ran the ForEach yet.  So, we put it in here instead
+        .onAppear {
+            setFeaturedIndex()
+        }
+    }
+    
+    // This method will find and set our initial tabSelectionIndex for us
+    func setFeaturedIndex() {
+        
+        // Find the index of the first recipe that is featured
+        // This syntax means find the first instance in the array where the featured property is true and then return the index of that instance, then store it in the 'index' variable
+        var index = model.recipes.firstIndex { (recipe) -> Bool in
+            return recipe.featured
+        }
+        // Here we store the index into our tabSelectionIndex variable.  If it returns nil, we'll just set it to zero
+        tabSelectionIndex = index ?? 0
     }
 }
 
