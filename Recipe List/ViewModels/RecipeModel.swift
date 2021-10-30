@@ -42,38 +42,37 @@ class RecipeModel: ObservableObject {
         // Here we declare a variable to store the string that we are going to return
         var portion = ""
         // This syntax is called a 'nil coalescing operator' and it means that if the value of ingredient.num or ingredient.denom comes in as nil, it will be set to '1' rather than nil
-        var numerator = ingredient.num ?? 1
-        var denominator = ingredient.denom ?? 1
+        var numerator = ingredient.num
+        var denominator = ingredient.denom
         var wholePortions = 0
         
-        if ingredient.num != nil {
             
-            // Get a single serving size by multiplying denominator by the recipe servings
-            denominator *= recipeServings
+        // Get a single serving size by multiplying denominator by the recipe servings
+        denominator *= recipeServings
+        
+        // Get target portion by multiplying numerator by target servings
+        numerator *= targetServings
+        
+        // Reduce fraction by greatest common divisor
+        // We added the Rational structure in the Utilities folder that has a method written to solve this.  It takes the num and denom as inputs and spits out the common divisor that can reduce the fraction for us.
+        let divisor = Rational.greatestCommonDivisor(numerator, denominator)
+        numerator /= divisor
+        denominator /= divisor
+        
+        // Get the whole portion if numerator > denominator
+        if numerator >= denominator {
             
-            // Get target portion by multiplying numerator by target servings
-            numerator *= targetServings
+            // Calculate the whole portions
+            // This equation could yield a decimal value.  It's assigning it to a variable with an Int data type, though, so it just drops the decimal and stores the whole number.
+            wholePortions = numerator / denominator
             
-            // Reduce fraction by greatest common divisor
-            // We added the Rational structure in the Utilities folder that has a method written to solve this.  It takes the num and denom as inputs and spits out the common divisor that can reduce the fraction for us.
-            let divisor = Rational.greatestCommonDivisor(numerator, denominator)
-            numerator /= divisor
-            denominator /= divisor
+            // This syntax returns the remainder.  Its called 'modulo operation'.
+            numerator = numerator % denominator
             
-            // Get the whole portion if numerator > denominator
-            if numerator >= denominator {
-                
-                // Calculate the whole portions
-                // This equation could yield a decimal value.  It's assigning it to a variable with an Int data type, though, so it just drops the decimal and stores the whole number.
-                wholePortions = numerator / denominator
-                
-                // This syntax returns the remainder.  Its called 'modulo operation'.
-                numerator = numerator % denominator
-                
-                // Assign to portion string
-                // When working with strings, += means 'append'
-                portion += String(wholePortions)
-            }
+            // Assign to portion string
+            // When working with strings, += means 'append'
+            portion += String(wholePortions)
+        }
             
             // Express the remainder as a fraction
             // First, we check if there is a remainder at all
@@ -85,7 +84,6 @@ class RecipeModel: ObservableObject {
                 portion += wholePortions > 0 ? " " : ""
                 portion += "\(numerator)/\(denominator)"
             }
-        }
         
         
         // Now we address the units, if there are any

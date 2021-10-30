@@ -23,7 +23,8 @@ struct RecipeDetailView: View {
                 // These marks can help to navigate through the code
                 // They create a label in the navigation string above this pane
                 // MARK: Recipe Image
-                Image(recipe.image)
+                let image = UIImage(data: recipe.image ?? Data()) ?? UIImage()
+                Image(uiImage: image)
                     .resizable()
                     .scaledToFill()
                 
@@ -55,12 +56,14 @@ struct RecipeDetailView: View {
                         .font(.headline)
                         .padding([.bottom, .top], 5)
                     
-                    ForEach (recipe.ingredients) { item in
-                        
+                    // 'ingredients' is now of the data type NSSet instead of [Ingredient] in order to preserve the relationship in core data
+                    // Here we pull that NSSet in as an array of Ingredient objects using the following syntax
+                    ForEach (recipe.ingredients.allObjects as! [Ingredient]) { item in
+
                         // Here we google searched "unicode dot", clicked the first result and copy/pasted the dot itself
                         // the '.lowercased()' syntax detects capital letters and changes them to lowercase
                         // Here, we're running the getPortion method in the RecipeModel, passing in our parameters and displaying what the method returns along with a bullet point before and the lowercased version of the item name after
-                        
+
                         Text("• " + RecipeModel.getPortion(ingredient: item, recipeServings: recipe.servings, targetServings: selectedServingSize) + " " + item.name.lowercased())
                     }
                 }

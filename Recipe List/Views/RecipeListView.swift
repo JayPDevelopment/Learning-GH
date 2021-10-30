@@ -9,6 +9,8 @@ import SwiftUI
 
 struct RecipeListView: View {
     
+    @Environment(\.managedObjectContext) private var viewContext
+    
     // This is how we populate the model variable with our "master" instance of RecipeModel
     @EnvironmentObject var model:RecipeModel
     
@@ -34,7 +36,8 @@ struct RecipeListView: View {
                                 RecipeDetailView(recipe: r)
                             } label: {
                                 HStack(spacing: 20.0) {
-                                    Image(r.image)
+                                    let image = UIImage(data: r.image ?? Data()) ?? UIImage()
+                                    Image(uiImage: image)
                                         .resizable()
                                         .scaledToFill()
                                         .frame(width: 50, height: 50, alignment: .center)

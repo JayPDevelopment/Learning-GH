@@ -9,6 +9,8 @@ import SwiftUI
 
 struct RecipeFeaturedView: View {
     
+    @Environment(\.managedObjectContext) private var viewContext
+    
     // This is how we populate the model variable with our "master" instance of RecipeModel
     @EnvironmentObject var model:RecipeModel
     
@@ -54,7 +56,8 @@ struct RecipeFeaturedView: View {
                                         .foregroundColor(.white)
                                     
                                     VStack(spacing: 0) {
-                                        Image(model.recipes[index].image)
+                                        let image = UIImage(data: model.recipes[index].image ?? Data()) ?? UIImage()
+                                        Image(uiImage: image)
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)
                                             .clipped()

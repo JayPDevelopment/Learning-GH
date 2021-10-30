@@ -7,7 +7,9 @@
 
 import Foundation
 
-class Recipe: Identifiable, Decodable {
+// We need to preserve these models for first time app use so that we can parse the json data and add it to core data
+// We added 'JSON' to the model names so they don't clash with our core data models
+class RecipeJSON: Identifiable, Decodable {
     
     var id:UUID?
     var name:String
@@ -19,12 +21,12 @@ class Recipe: Identifiable, Decodable {
     var totalTime:String
     var servings:Int
     var highlights:[String]
-    var ingredients:[Ingredient]
+    var ingredients:[IngredientJSON]
     var directions:[String]
     
 }
 
-class Ingredient: Identifiable, Decodable {
+class IngredientJSON: Identifiable, Decodable {
     
     var id:UUID?
     var name:String
