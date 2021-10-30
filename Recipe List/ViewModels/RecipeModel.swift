@@ -6,30 +6,98 @@
 //
 
 import Foundation
+import UIKit
 
 class RecipeModel: ObservableObject {
+    
+    // Reference to the managed object context
+    let managedObjectContext = PersistenceController.shared.container.viewContext
     
     @Published var recipes = [Recipe]()
     
     init() {
         
-        // Parse the local json file and set the recipes property
-        
-        // Instead of writing here, we'll put all the code that fetches data into the 'Services' folder
-        // As our project grows, we could have multiple view models that could use this same code
-        // Instead of repeating it in every view model, we'll refactor it into it's own class
-        
-        // Create an instance of DataService and get the data
-        // let service = DataService()
-        // self.recipes = service.getLocalData()
-        
-        // we could compress this into self.recipes = DataService().getLocalData()
-        
-        // We're gonna do one better and call the type method directly and store it in the recipes property
-        
-        self.recipes = DataService.getLocalData()
+        // Check if we have already pre-loaded the data into core data
+        checkLoadedData()
     }
     
+    func checkLoadedData() {
+        
+        // Check local storage for the flag
+        // We stored the nomenclature for this flag in the Constants file, probably just to keep track of them
+        // Instead of 'Constants.isDataPreloaded' we probably could have passed in "isDataPreloaded" and that key would be searched for in UserDefaults.  It would return false if it either didn't find the key or it found it and it contained false.
+        // I think this syntax itself might create the key?  If not, it will be officially created when you set its value at the end of this function
+        let status = UserDefaults.standard.bool(forKey: Constants.isDataPreloaded)
+        
+        // If it's false, then we should parse the local json and preload into core data
+        if status == false {
+            preloadLocalData()
+        }
+    }
+    
+    func preloadLocalData() {
+        
+        // Parse the local json file
+        let localRecipes = DataService.getLocalData()
+        
+        // Create core data objects
+        for r in localRecipes {
+            
+            // Create a core data object
+            let recipe = Recipe(context: managedObjectContext)
+            
+            // Set the core data object's properties using the json object properties
+            recipe.cookTime = r.cookTime
+            recipe.directions = r.directions
+            recipe.featured = r.featured
+            recipe.highlights = r.highlights
+            // Here we'll just create an actual UUID
+            recipe.id = UUID()
+            // Here is how we turn an asset image into the 'Data' data type needed for core data
+            // Note that it's necessary to have UIKit imported in order to use UIImage
+            // For some reason we needed to load the managedObjectContext variable into our RecipeModel to get this to work?
+            // the 'named' initializer passes in a string and looks in the asset library for the name
+            // the UIImage then has a property called jpegData that gives you the data representation of the image
+            // if this returns nil, that's ok because our image property is optional
+            recipe.image = UIImage(named: r.image)?.jpegData(compressionQuality: 1.0)
+            recipe.name = r.name
+            recipe.prepTime = r.prepTime
+            recipe.servings = r.servings
+            recipe.summary = r.description
+            recipe.totalTime = r.totalTime
+            
+            // Set the ingredients
+            for i in r.ingredients {
+                
+                // Create a core data ingredient object
+                let ingredient = Ingredient(context: managedObjectContext)
+                
+                ingredient.id = UUID()
+                ingredient.name = i.name
+                ingredient.unit = i.unit
+                // The num/denom is supposed to be optional but due to our bug, we can't set our ints to optional.  So, we check for nil and enter '1' if it's nil.  This way our quantitites just turn out to be 1 if there some willy nilly going on
+                ingredient.num = i.num ?? 1
+                ingredient.denom = i.denom ?? 1
+                
+                // Add this to the recipe
+                // Our core data model for Recipe has a handy function we can use to add this to our model
+                recipe.addToIngredients(ingredient)
+            }
+        }
+        
+        // Save into core data
+        do {
+            try managedObjectContext.save()
+            
+            // Set local storage flag
+            // I think that if the save code above is not successful, it will skip this and go to catch
+            // Here we again link to 'Constants.isDataPreloaded' for our nomenclature that we want to use for the Key.  We then set that key to 'true' in the User Defaults.
+            UserDefaults.standard.setValue(true, forKey: Constants.isDataPreloaded)
+        }
+        catch {
+            // Couldn't save to core data
+        }
+    }
     
     // We're using this method to organize our ingredients list such that it updates with changes to the servings Picker
     // Making the method static means we can call the method without creating an instance of RecipeModel
