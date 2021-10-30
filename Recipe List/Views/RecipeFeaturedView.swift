@@ -11,7 +11,6 @@ struct RecipeFeaturedView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     
-    // This is how we populate the model variable with our "master" instance of RecipeModel
     @EnvironmentObject var model:RecipeModel
     
     // This is our .sheet controlling variable for making our recipe cards into buttons
@@ -22,7 +21,6 @@ struct RecipeFeaturedView: View {
     
     var body: some View {
         
-        // We embedded all of our code into a geometry reader so that we can adjust the rectangle below
         VStack(alignment: .leading, spacing: 0) {
             
             Text("Featured Recipes")
@@ -56,6 +54,8 @@ struct RecipeFeaturedView: View {
                                         .foregroundColor(.white)
                                     
                                     VStack(spacing: 0) {
+                                        // core data stores images as data type 'Data'
+                                        // We have to load the image in the following manner now if it comes from core data
                                         let image = UIImage(data: model.recipes[index].image ?? Data()) ?? UIImage()
                                         Image(uiImage: image)
                                             .resizable()
@@ -133,7 +133,6 @@ struct RecipeFeaturedView: View {
 struct RecipeFeaturedView_Previews: PreviewProvider {
     static var previews: some View {
         
-        // HERE'S how you get the preview to work when you're messing with environment objects.
         RecipeFeaturedView()
             .environmentObject(RecipeModel())
     }

@@ -11,7 +11,6 @@ struct RecipeListView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     
-    // This is how we populate the model variable with our "master" instance of RecipeModel
     @EnvironmentObject var model:RecipeModel
     
     var body: some View {
@@ -26,8 +25,6 @@ struct RecipeListView: View {
                 
                 ScrollView {
                     
-                    // A lazy vstack only creates or renders items as needed
-                    // When you have a ton of rows, you don't want your phone to allocate memory to EVERY row, just the ones being displayed or used
                     LazyVStack (alignment: .leading) {
                         
                         ForEach (model.recipes) { r in
@@ -36,6 +33,8 @@ struct RecipeListView: View {
                                 RecipeDetailView(recipe: r)
                             } label: {
                                 HStack(spacing: 20.0) {
+                                    // core data stores images as data type 'Data'
+                                    // We have to load the image in the following manner now if it comes from core data
                                     let image = UIImage(data: r.image ?? Data()) ?? UIImage()
                                     Image(uiImage: image)
                                         .resizable()
@@ -56,10 +55,6 @@ struct RecipeListView: View {
                         }
                     }
                 }
-                
-                // Here, we're trying to format the app so that the View title matches our featured view
-                // Basically, we're eliminating the automatically displayed navigationBarTitle and adding our own text element above that matches the rest of our app (the featured view
-                // .navigationBarTitle("All Recipes")
                 .navigationBarHidden(true)
             }
             .padding(.leading)

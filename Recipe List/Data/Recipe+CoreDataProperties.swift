@@ -16,6 +16,10 @@ extension Recipe {
         return NSFetchRequest<Recipe>(entityName: "Recipe")
     }
 
+    // We dropped the '64' from the Ints
+    // We changed our optionals to match what we want
+    // Note that the data type for ingredients must be 'NSSet' in order to link to the Ingredients class in core data.  We'll have to manage this data type when we try to display this property by converting this data type into the array of strings that we'd like it to be.
+    // Note also that the image data type is 'Data'.  This is necessary in order to store the image into core data.  We'll have to manage this data type when we try to display this property by calling the data into a variable and passing it into an Image() object.  We keep it optional here so that we don't force the app user to add an image if they don't want to.
     @NSManaged public var id: UUID?
     @NSManaged public var name: String
     @NSManaged public var featured: Bool

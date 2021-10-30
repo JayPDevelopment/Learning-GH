@@ -16,13 +16,11 @@ struct RecipeDetailView: View {
     var body: some View {
         ScrollView {
             
-            // We put the entire ScrollView into a VStack so that we could align everything together
-            
             VStack(alignment: .leading) {
                 
-                // These marks can help to navigate through the code
-                // They create a label in the navigation string above this pane
                 // MARK: Recipe Image
+                // core data stores images as data type 'Data'
+                // We have to load the image in the following manner now if it comes from core data
                 let image = UIImage(data: recipe.image ?? Data()) ?? UIImage()
                 Image(uiImage: image)
                     .resizable()
@@ -60,18 +58,12 @@ struct RecipeDetailView: View {
                     // Here we pull that NSSet in as an array of Ingredient objects using the following syntax
                     ForEach (recipe.ingredients.allObjects as! [Ingredient]) { item in
 
-                        // Here we google searched "unicode dot", clicked the first result and copy/pasted the dot itself
-                        // the '.lowercased()' syntax detects capital letters and changes them to lowercase
-                        // Here, we're running the getPortion method in the RecipeModel, passing in our parameters and displaying what the method returns along with a bullet point before and the lowercased version of the item name after
-
                         Text("• " + RecipeModel.getPortion(ingredient: item, recipeServings: recipe.servings, targetServings: selectedServingSize) + " " + item.name.lowercased())
                     }
                 }
-                // This is just padding on the left and right at the same time
                 .padding(.horizontal)
                 
                 // MARK: Divider
-                // This looks like it sort of just adds a thin little line to help the UI give a little extra visual separation between the ingredients list and the directions
                 
                 Divider()
                 
@@ -94,9 +86,6 @@ struct RecipeDetailView: View {
 
 struct RecipeDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        
-        // Create a dummy recipe and pass it into the detail view so that we can see a preview
-        // We have to do this since our 'recipe' variable above is not preloaded with anything so the normal preview code throws an error
         
         let model = RecipeModel()
         

@@ -5,6 +5,9 @@
 //  Created by Justin Puuri on 10/30/21.
 //
 
+// This whole file was just copy-pasted from a blank project that was preordained to use core data
+// We then changed a couple small items to implement the Recipe class and load a UUID for us as seen below
+
 import CoreData
 
 struct PersistenceController {
@@ -14,6 +17,7 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         for _ in 0..<10 {
+            // We updated the two following lines of code to work with our app
             let newItem = Recipe(context: viewContext)
             newItem.id = UUID()
         }

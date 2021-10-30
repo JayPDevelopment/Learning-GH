@@ -16,6 +16,9 @@ extension Ingredient {
         return NSFetchRequest<Ingredient>(entityName: "Ingredient")
     }
 
+    // We dropped the '64' from the Ints
+    // We changed our optionals to match what we want
+    // We wanted 'num' and 'denom' to be optionals but a bug won't allow that
     @NSManaged public var id: UUID?
     @NSManaged public var name: String
     @NSManaged public var num: Int
