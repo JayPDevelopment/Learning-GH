@@ -20,8 +20,6 @@ struct RecipeDetailView: View {
             
             VStack(alignment: .leading) {
                 
-                // We could add a title in here but it would be cool to have that just be a part of the navigation bar title from the navigation list from the list view (see navigationBarTitle attached to the end of the ScrollView
-                
                 // These marks can help to navigate through the code
                 // They create a label in the navigation string above this pane
                 // MARK: Recipe Image

@@ -17,7 +17,6 @@ struct RecipeTabView: View {
                         Text("Featured")
                     }
                 }
-            
             RecipeListView()
                 .tabItem {
                     VStack {
@@ -25,7 +24,8 @@ struct RecipeTabView: View {
                         Text("List")
                     }
                 }
-            // This modifier creates an instance of RecipeModel that all of the subviews after it can use.  This way, we don't repeatedly and unnecessarily run our DataService for every view.
+            
+        // This modifier creates an instance of RecipeModel that all of the subviews after it can use.  This way, we don't repeatedly and unnecessarily run our DataService for every view.
         }.environmentObject(RecipeModel())
     }
 }

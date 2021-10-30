@@ -65,12 +65,14 @@ struct RecipeFeaturedView: View {
                             }
                             // Here we tag the card with the array index.  I think this is the tag that then gets bound to the tabSelectionIndex
                             .tag(index)
+                            
                             // This allows us to slide up the RecipeDetailView when the button is tapped, changing isDetailViewShowing to true and running the .sheet modifier
                             // The '$' binds the variable so that when the user dismisses the popup view, the isDetailViewShowing goes back to 'false'
                             .sheet(isPresented: $isDetailViewShowing) {
                                 // Show the RecipeDetailView
                                 RecipeDetailView(recipe: model.recipes[index])
                             }
+                            
                             // This keeps the Button from turning the text within the label blue
                             .buttonStyle(PlainButtonStyle())
                             .frame(width: geo.size.width - 40, height: geo.size.height - 100, alignment: .center)
@@ -89,12 +91,16 @@ struct RecipeFeaturedView: View {
             }
             
             VStack(alignment: .leading, spacing: 10) {
+                
                 Text("Preparation Time")
                     .font(.headline)
+                
                 // We need access to the recipe being displayed to update the below data but that info is inside the ForEach loop.  So, we pull it out using the tabSelectionIndex
                 Text(model.recipes[tabSelectionIndex].prepTime)
+                
                 Text("Highlights")
                     .font(.headline)
+                
                 // We made a separate view that processes the array of strings in the highlights section of the json data and displays a single text string containing those elements. We run it here.
                 RecipeHighlights(highlights: model.recipes[tabSelectionIndex].highlights)
             }
@@ -115,6 +121,7 @@ struct RecipeFeaturedView: View {
         var index = model.recipes.firstIndex { (recipe) -> Bool in
             return recipe.featured
         }
+        
         // Here we store the index into our tabSelectionIndex variable.  If it returns nil, we'll just set it to zero
         tabSelectionIndex = index ?? 0
     }

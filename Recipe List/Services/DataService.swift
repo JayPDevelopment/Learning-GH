@@ -57,9 +57,6 @@ class DataService {
                 // error with parsing json
                 print(error)
             }
-            
-            
-            
         }
         catch {
             // Error with gatting data
@@ -67,6 +64,5 @@ class DataService {
         }
         
         return [Recipe]()
-        
     }
 }
