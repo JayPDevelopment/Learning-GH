@@ -9,9 +9,12 @@ import SwiftUI
 
 struct RecipeFeaturedView: View {
     
-    @Environment(\.managedObjectContext) private var viewContext
+    // We altered our project to refer to some core data fetched results rather that this environment object
+    //@EnvironmentObject var model:RecipeModel
     
-    @EnvironmentObject var model:RecipeModel
+    // Here we'll get slightly fancy and sort our results into alphabetical order, just cuz
+    // We'll get even more fancy and filter the fetch request to only fetch data that is featured.  This way we can remove the 'if recipes[index].featured' statement below
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate: NSPredicate(format: "featured == true")) var recipes: FetchedResults<Recipe>
     
     // This is our .sheet controlling variable for making our recipe cards into buttons
     @State var isDetailViewShowing = false
@@ -36,53 +39,49 @@ struct RecipeFeaturedView: View {
                 TabView (selection: $tabSelectionIndex) {
                     
                     // Loop through each recipe
-                    ForEach (0..<model.recipes.count) { index in
-                        
-                        // Only show those that should be featured
-                        if model.recipes[index].featured {
+                    ForEach (0..<recipes.count) { index in
+                    
+                        // Recipe card button
+                        Button(action: {
                             
-                            // Recipe card button
-                            Button(action: {
+                            //Show the recipe detail sheet
+                            self.isDetailViewShowing = true
+                        }) {
+                            
+                            // Recipe card
+                            ZStack {
+                                Rectangle()
+                                    .foregroundColor(.white)
                                 
-                                //Show the recipe detail sheet
-                                self.isDetailViewShowing = true
-                            }) {
-                                
-                                // Recipe card
-                                ZStack {
-                                    Rectangle()
-                                        .foregroundColor(.white)
-                                    
-                                    VStack(spacing: 0) {
-                                        // core data stores images as data type 'Data'
-                                        // We have to load the image in the following manner now if it comes from core data
-                                        let image = UIImage(data: model.recipes[index].image ?? Data()) ?? UIImage()
-                                        Image(uiImage: image)
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .clipped()
-                                        Text(model.recipes[index].name)
-                                            .padding(5)
-                                    }
+                                VStack(spacing: 0) {
+                                    // core data stores images as data type 'Data'
+                                    // We have to load the image in the following manner now if it comes from core data
+                                    let image = UIImage(data: recipes[index].image ?? Data()) ?? UIImage()
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .clipped()
+                                    Text(recipes[index].name)
+                                        .padding(5)
                                 }
                             }
-                            // Here we tag the card with the array index.  I think this is the tag that then gets bound to the tabSelectionIndex
-                            .tag(index)
-                            
-                            // This allows us to slide up the RecipeDetailView when the button is tapped, changing isDetailViewShowing to true and running the .sheet modifier
-                            // The '$' binds the variable so that when the user dismisses the popup view, the isDetailViewShowing goes back to 'false'
-                            .sheet(isPresented: $isDetailViewShowing) {
-                                // Show the RecipeDetailView
-                                RecipeDetailView(recipe: model.recipes[index])
-                            }
-                            
-                            // This keeps the Button from turning the text within the label blue
-                            .buttonStyle(PlainButtonStyle())
-                            .frame(width: geo.size.width - 40, height: geo.size.height - 100, alignment: .center)
-                            .cornerRadius(15)
-                            // This creates the sexy floating card look
-                            .shadow(color: .black, radius: 10, x: -5, y: 5)
                         }
+                        // Here we tag the card with the array index.  I think this is the tag that then gets bound to the tabSelectionIndex
+                        .tag(index)
+                        
+                        // This allows us to slide up the RecipeDetailView when the button is tapped, changing isDetailViewShowing to true and running the .sheet modifier
+                        // The '$' binds the variable so that when the user dismisses the popup view, the isDetailViewShowing goes back to 'false'
+                        .sheet(isPresented: $isDetailViewShowing) {
+                            // Show the RecipeDetailView
+                            RecipeDetailView(recipe: recipes[index])
+                        }
+                        
+                        // This keeps the Button from turning the text within the label blue
+                        .buttonStyle(PlainButtonStyle())
+                        .frame(width: geo.size.width - 40, height: geo.size.height - 100, alignment: .center)
+                        .cornerRadius(15)
+                        // This creates the sexy floating card look
+                        .shadow(color: .black, radius: 10, x: -5, y: 5)
                     }
                 }
                 // This is how we get the swipeable card effect
@@ -99,13 +98,13 @@ struct RecipeFeaturedView: View {
                     .font(.headline)
                 
                 // We need access to the recipe being displayed to update the below data but that info is inside the ForEach loop.  So, we pull it out using the tabSelectionIndex
-                Text(model.recipes[tabSelectionIndex].prepTime)
+                Text(recipes[tabSelectionIndex].prepTime)
                 
                 Text("Highlights")
                     .font(.headline)
                 
                 // We made a separate view that processes the array of strings in the highlights section of the json data and displays a single text string containing those elements. We run it here.
-                RecipeHighlights(highlights: model.recipes[tabSelectionIndex].highlights)
+                RecipeHighlights(highlights: recipes[tabSelectionIndex].highlights)
             }
             .padding([.leading, .bottom])
         }
@@ -121,7 +120,7 @@ struct RecipeFeaturedView: View {
         
         // Find the index of the first recipe that is featured
         // This syntax means find the first instance in the array where the featured property is true and then return the index of that instance, then store it in the 'index' variable
-        var index = model.recipes.firstIndex { (recipe) -> Bool in
+        var index = recipes.firstIndex { (recipe) -> Bool in
             return recipe.featured
         }
         
