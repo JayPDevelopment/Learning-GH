@@ -20,6 +20,8 @@
 		A54E3FE9272E294E00256A0C /* AddRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54E3FE8272E294E00256A0C /* AddRecipeView.swift */; };
 		A54E3FEB272E2EA400256A0C /* AddMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54E3FEA272E2EA400256A0C /* AddMetaData.swift */; };
 		A54E3FED272E300100256A0C /* AddListData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54E3FEC272E300100256A0C /* AddListData.swift */; };
+		A54E3FEF272E405B00256A0C /* AddIngredientData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54E3FEE272E405B00256A0C /* AddIngredientData.swift */; };
+		A54E3FF1272E4B3000256A0C /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54E3FF0272E4B3000256A0C /* ImagePicker.swift */; };
 		A5B5CF52271C9DA800758071 /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B5CF51271C9DA800758071 /* RecipeDetailView.swift */; };
 		A5D66F052724C16500B24100 /* Rational.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D66F042724C16500B24100 /* Rational.swift */; };
 		A5D66F092724F26D00B24100 /* RecipeHighlights.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D66F082724F26D00B24100 /* RecipeHighlights.swift */; };
@@ -47,6 +49,8 @@
 		A54E3FE8272E294E00256A0C /* AddRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRecipeView.swift; sourceTree = "<group>"; };
 		A54E3FEA272E2EA400256A0C /* AddMetaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMetaData.swift; sourceTree = "<group>"; };
 		A54E3FEC272E300100256A0C /* AddListData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddListData.swift; sourceTree = "<group>"; };
+		A54E3FEE272E405B00256A0C /* AddIngredientData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIngredientData.swift; sourceTree = "<group>"; };
+		A54E3FF0272E4B3000256A0C /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		A5B5CF51271C9DA800758071 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
 		A5D66F042724C16500B24100 /* Rational.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rational.swift; sourceTree = "<group>"; };
 		A5D66F082724F26D00B24100 /* RecipeHighlights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeHighlights.swift; sourceTree = "<group>"; };
@@ -130,6 +134,7 @@
 				A54E3FE8272E294E00256A0C /* AddRecipeView.swift */,
 				A54E3FEA272E2EA400256A0C /* AddMetaData.swift */,
 				A54E3FEC272E300100256A0C /* AddListData.swift */,
+				A54E3FEE272E405B00256A0C /* AddIngredientData.swift */,
 				A5B5CF51271C9DA800758071 /* RecipeDetailView.swift */,
 				A5D66F082724F26D00B24100 /* RecipeHighlights.swift */,
 				A54E3FE6272E219D00256A0C /* SearchBarView.swift */,
@@ -171,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				A5E74F86271BCDD000F184EE /* DataService.swift */,
+				A54E3FF0272E4B3000256A0C /* ImagePicker.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -258,6 +264,8 @@
 				A5E74F85271BCC1D00F184EE /* RecipeModel.swift in Sources */,
 				A5E74F70271BC8F900F184EE /* RecipeListView.swift in Sources */,
 				A5D66F092724F26D00B24100 /* RecipeHighlights.swift in Sources */,
+				A54E3FEF272E405B00256A0C /* AddIngredientData.swift in Sources */,
+				A54E3FF1272E4B3000256A0C /* ImagePicker.swift in Sources */,
 				A54E3FE9272E294E00256A0C /* AddRecipeView.swift in Sources */,
 				A54E3FE7272E219D00256A0C /* SearchBarView.swift in Sources */,
 				A54E3FC0272DDBFA00256A0C /* Ingredient+CoreDataProperties.swift in Sources */,
@@ -400,6 +408,7 @@
 				DEVELOPMENT_TEAM = 9H9N4K4R78;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Access to the camera to take a photo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -430,6 +439,7 @@
 				DEVELOPMENT_TEAM = 9H9N4K4R78;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Access to the camera to take a photo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
