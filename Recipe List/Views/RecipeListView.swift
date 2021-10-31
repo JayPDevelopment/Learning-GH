@@ -11,7 +11,25 @@ struct RecipeListView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     
-    @EnvironmentObject var model:RecipeModel
+    // @EnvironmentObject var model:RecipeModel
+    
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)])
+    private var recipes: FetchedResults<Recipe>
+    
+    @State private var filterBy = ""
+    
+    private var filteredRecipes: [Recipe] {
+        
+        if filterBy.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+            return Array(recipes)
+        }
+        else {
+            // Filter by the search term and return a subset of recipes which contain the search term in the name
+            return recipes.filter { r in
+                return r.name.contains(filterBy)
+            }
+        }
+    }
     
     var body: some View {
         
@@ -23,11 +41,14 @@ struct RecipeListView: View {
                     .fontWeight(.bold)
                     .padding(.top, 40)
                 
+                SearchBarView(filterBy: $filterBy)
+                    .padding([.trailing, .bottom])
+                
                 ScrollView {
                     
                     LazyVStack (alignment: .leading) {
                         
-                        ForEach (model.recipes) { r in
+                        ForEach (filteredRecipes) { r in
                             
                             NavigationLink {
                                 RecipeDetailView(recipe: r)
@@ -55,9 +76,14 @@ struct RecipeListView: View {
                         }
                     }
                 }
-                .navigationBarHidden(true)
             }
+            .navigationBarHidden(true)
             .padding(.leading)
+            .onTapGesture {
+                // Resign first responder
+                // This allows us to click off of the search bar and close the keyboard
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
         }
     }
 }
