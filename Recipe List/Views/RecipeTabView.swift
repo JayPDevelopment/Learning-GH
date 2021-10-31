@@ -24,6 +24,14 @@ struct RecipeTabView: View {
                         Text("List")
                     }
                 }
+            
+            AddRecipeView()
+                .tabItem {
+                    VStack {
+                        Image(systemName: "plus.circle")
+                        Text("Add Recipe")
+                    }
+                }
         }.environmentObject(RecipeModel())
     }
 }
